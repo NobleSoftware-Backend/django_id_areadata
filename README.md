@@ -6,7 +6,6 @@ To use this app, you need to have these requirements:
 - django >= 5.0
 - djangorestframework (for the area endpoints)
 - drf-spectacular (for swagger schema)
-- django-filter (for the area endpoints)
 
 ## How to use
 
@@ -16,7 +15,6 @@ INSTALLED_APPS = [
   ...
   "rest_framework",
   "drf_spectacular",
-  "django_filters",
   "django_id_areadata"
 ]
 ```
@@ -30,9 +28,6 @@ urlpatterns = [
   path("area/", include("django_id_areadata.urls"))
 ]
 ```
-
-
-And then you can run `python manage.py updatearea` to populate the area data for the first time.
 
 
 ## License

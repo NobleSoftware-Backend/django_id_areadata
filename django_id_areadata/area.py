@@ -3,7 +3,6 @@ from typing import TypeVar
 from django_id_areadata.models import Province, Area, Regency, District, SubDistrict
 from django_id_areadata.csv_utils import read_csv
 
-# Create a type variable matching your model definition
 AreaType = TypeVar("AreaType", bound=Area)
 
 class AreaData:

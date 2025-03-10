@@ -1,6 +1,6 @@
-from typing import Any, List, Type, Optional, cast, TYPE_CHECKING
+from typing import List, Type, Optional, TYPE_CHECKING, TypeVar
 
-from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
     OpenApiExample,
     OpenApiParameter,
@@ -8,7 +8,6 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
-from drf_spectacular.types import OpenApiTypes
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -26,13 +25,14 @@ from django_id_areadata.serializers import (
 if TYPE_CHECKING:
     from rest_framework.request import Request
 
+# Create a type variable matching Area types
+AreaType = TypeVar("AreaType", bound=Area)
 
 class AreaListView(ListAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = None
-    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
-    model: Optional[Type[Area]] = None
+    model: Optional[AreaType] = None
 
     def get_and_filter_model(self, request: "Request") -> tuple[List[Area], int]:
         """
@@ -46,12 +46,12 @@ class AreaListView(ListAPIView):
 
         query_params = request.query_params
         filter_id: Optional[str] = (
-                query_params.get("province_id")
-                or query_params.get("regency_id")
-                or query_params.get("district_id")
+            query_params.get("province_id")
+            or query_params.get("regency_id")
+            or query_params.get("district_id")
         )
 
-        search_query = query_params.get('search')
+        search_query = query_params.get("search")
 
         area_data: AreaData = AreaData(area_type=self.model)
 
@@ -141,7 +141,6 @@ class ProvinceList(AreaListView):
     ),
 )
 class RegencyList(AreaListView):
-    filterset_fields = ["province_id"]
     serializer_class = RegencySerializer
     model = Regency
 
@@ -173,7 +172,6 @@ class RegencyList(AreaListView):
     ),
 )
 class DistrictList(AreaListView):
-    filterset_fields = ["regency_id"]
     serializer_class = DistrictSerializer
     model = District
 
@@ -206,6 +204,5 @@ class DistrictList(AreaListView):
     ),
 )
 class SubDistrictList(AreaListView):
-    filterset_fields = ["district_id"]
     serializer_class = SubDistrictSerializer
     model = SubDistrict

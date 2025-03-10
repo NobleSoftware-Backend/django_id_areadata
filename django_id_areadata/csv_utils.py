@@ -6,7 +6,6 @@ from typing import Iterator, Type, Dict, List, Optional, cast, TypeVar, Union
 
 from django_id_areadata.models import Area, District, Province, Regency, SubDistrict
 
-# Create a type variable matching your model definition
 AreaType = TypeVar("AreaType", bound=Area)
 
 # Define the mapping with proper type annotations
